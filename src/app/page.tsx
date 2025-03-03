@@ -8,8 +8,8 @@ export default function Home() {
     const [extractedText, setExtractedText] = useState("");
     const [summary, setSummary] = useState("");
     const [extractedCode, setExtractedCode] = useState("");
-    const [aiResponse, setAiResponse] = useState(""); // ✅ Stores AI-generated/fixed/explained code
-    const [customPrompt, setCustomPrompt] = useState(""); // ✅ Custom prompt input
+    const [aiResponse, setAiResponse] = useState("");
+    const [customPrompt, setCustomPrompt] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [processingCode, setProcessingCode] = useState(false);
@@ -52,7 +52,7 @@ export default function Home() {
         setProcessingCode(true);
         setError(null);
         setExtractedCode("");
-        setAiResponse(""); // ✅ Reset AI response when new extraction happens
+        setAiResponse("");
 
         try {
             const response = await axios.post("http://127.0.0.1:8000/extract_code", formData, {
@@ -70,23 +70,21 @@ export default function Home() {
         }
     };
 
-    // AI Operations
     const handleAIAction = async (action: "generate" | "fix" | "explain" | "custom", customPrompt: string = "") => {
         if (!extractedCode) {
             alert("No extracted code available!");
             return;
         }
     
-        // Prepare request payload
         const payload = action === "custom" 
-            ? { code: extractedCode, custom_prompt: customPrompt } // 🔹 Use `custom_prompt`
+            ? { code: extractedCode, custom_prompt: customPrompt }
             : { code: extractedCode };
     
         try {
             const response = await axios.post(`http://127.0.0.1:8000/${action}`, payload);
     
             console.log(`✅ AI ${action} Response:`, response.data);
-            setAiResponse(response.data.result || "No response from AI."); // ✅ Store AI response in state
+            setAiResponse(response.data.result || "No response from AI.");
     
         } catch (error) {
             const err = error as any;
@@ -95,87 +93,48 @@ export default function Home() {
         }
     };
     
-
     return (
-        <div className="container" style={{ maxWidth: "600px", margin: "50px auto", textAlign: "center" }}>
-            <h1>AI-Powered Document Scanner</h1>
+        <div className="max-w-lg mx-auto my-12 text-center">
+            <h1 className="text-2xl font-bold">AI-Powered Document Scanner</h1>
 
-            {/* Document Upload Section */}
-            <div style={{ marginBottom: "30px", padding: "20px", border: "1px solid #ddd", borderRadius: "5px" }}>
-                <h2>Process Text Documents</h2>
-                <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-                <button onClick={handleUpload} disabled={loading} style={{ marginLeft: "10px" }}>
+            <div className="mb-8 p-5 border border-gray-300 rounded">
+                <h2 className="text-xl font-semibold">Process Text Documents</h2>
+                <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} className="mt-2" />
+                <button onClick={handleUpload} disabled={loading} className="ml-3 px-4 py-2 bg-blue-500 text-white rounded">
                     {loading ? "Processing..." : "Upload"}
                 </button>
-                {error && <p style={{ color: "red" }}>❌ {error}</p>}
-                {extractedText && (
-                    <div style={{ textAlign: "left", marginTop: "20px" }}>
-                        <h3>Extracted Text:</h3>
-                        <p>{extractedText}</p>
-                    </div>
-                )}
-                {summary && (
-                    <div style={{ textAlign: "left", marginTop: "20px", background: "#000", padding: "10px", borderRadius: "5px", color: "#fff" }}>
-                        <h3>Summary:</h3>
-                        <p>{summary}</p>
-                    </div>
-                )}
+                {error && <p className="text-red-500">❌ {error}</p>}
+                {extractedText && <div className="mt-5 text-left"><h3 className="font-semibold">Extracted Text:</h3><p>{extractedText}</p></div>}
+                {summary && <div className="mt-5 text-left bg-black text-white p-3 rounded"><h3 className="font-semibold">Summary:</h3><p>{summary}</p></div>}
             </div>
 
-            {/* Code Image Upload Section */}
-            <div style={{ padding: "20px", border: "1px solid #ddd", borderRadius: "5px", marginTop: "20px" }}>
-                <h2>Extract Code from Image</h2>
-                <input type="file" onChange={(e) => setCodeImage(e.target.files?.[0] || null)} />
-                <button onClick={handleCodeExtraction} disabled={processingCode} style={{ marginLeft: "10px" }}>
+            <div className="p-5 border border-gray-300 rounded">
+                <h2 className="text-xl font-semibold">Extract Code from Image</h2>
+                <input type="file" onChange={(e) => setCodeImage(e.target.files?.[0] || null)} className="mt-2" />
+                <button onClick={handleCodeExtraction} disabled={processingCode} className="ml-3 px-4 py-2 bg-blue-500 text-white rounded">
                     {processingCode ? "Extracting..." : "Extract Code"}
                 </button>
-                {extractedCode && (
-                    <div style={{ textAlign: "left", marginTop: "20px", background: "#1e1e1e", color: "#fff", padding: "10px", borderRadius: "5px" }}>
-                        <h3>Extracted Code:</h3>
-                        <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{extractedCode}</pre>
+                {extractedCode && <div className="mt-5 text-left bg-gray-900 text-white p-3 rounded"><h3 className="font-semibold">Extracted Code:</h3><pre className="whitespace-pre-wrap break-words">{extractedCode}</pre></div>}
 
-                        {/* AI Action Buttons */}
-                        <div style={{ marginTop: "10px", display: "flex", justifyContent: "space-between" }}>
-                            <button onClick={() => handleAIAction("generate")} style={buttonStyle}>Generate</button>
-                            <button onClick={() => handleAIAction("fix")} style={buttonStyle}>Fix</button>
-                            <button onClick={() => handleAIAction("explain")} style={buttonStyle}>Explain</button>
-                        </div>
+                <div className="mt-4 flex gap-2">
+                    <button onClick={() => handleAIAction("generate")} className="px-4 py-2 bg-blue-500 text-white rounded">Generate</button>
+                    <button onClick={() => handleAIAction("fix")} className="px-4 py-2 bg-blue-500 text-white rounded">Fix</button>
+                    <button onClick={() => handleAIAction("explain")} className="px-4 py-2 bg-blue-500 text-white rounded">Explain</button>
+                </div>
 
-                        {/* ✅ Custom Prompt Input Area */}
-                        <div style={{ marginTop: "10px", textAlign: "left" }}>
-                            <h3>Custom AI Prompt:</h3>
-                            <input
-                                type="text"
-                                value={customPrompt}
-                                onChange={(e) => setCustomPrompt(e.target.value)}
-                                placeholder="Enter your custom prompt..."
-                                style={{ width: "100%", padding: "8px", marginTop: "5px", borderRadius: "5px", border: "1px solid #ddd" }}
-                            />
-                            <button onClick={() => handleAIAction("custom", customPrompt)} style={{ ...buttonStyle, marginTop: "10px" }}>Submit Prompt</button>
-                        </div>
-                    </div>
-                )}
-
+                <div className="mt-4 text-left">
+                    <h3 className="font-semibold">Custom AI Prompt:</h3>
+                    <input type="text" value={customPrompt} onChange={(e) => setCustomPrompt(e.target.value)} placeholder="Enter your custom prompt..." className="w-full p-2 mt-2 border border-gray-300 rounded" />
+                    <button onClick={() => handleAIAction("custom", customPrompt)} className="mt-3 px-4 py-2 bg-blue-500 text-white rounded">Submit Prompt</button>
+                </div>
                 {/* ✅ AI Response Section */}
                 {aiResponse && (
-                    <div style={{ textAlign: "left", marginTop: "20px", background: "#282c34", color: "#fff", padding: "10px", borderRadius: "5px", overflow:"scroll" }}>
-                        <h3>AI Response:</h3>
-                        <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{aiResponse}</pre>
+                    <div className="text-left mt-5 bg-gray-900 text-white p-3 rounded-lg overflow-scroll">
+                        <h3 className="text-lg font-semibold">AI Response:</h3>
+                        <pre className="whitespace-pre-wrap break-words">{aiResponse}</pre>
                     </div>
                 )}
             </div>
         </div>
     );
 }
-
-// Button Styling
-const buttonStyle: React.CSSProperties = {
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    padding: "10px",
-    borderRadius: "5px",
-    cursor: "pointer",
-    flex: 1,
-    margin: "0 5px"
-};
