@@ -1,140 +1,109 @@
 "use client";
-import { useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import { extractTextFromImage } from "./lib/azureOCR";
+import { summarizeText } from "./lib/geminiAPI";
+import FileUploader from "./Components/FileUploader";
 
-export default function Home() {
-    const [file, setFile] = useState<File | null>(null);
-    const [codeImage, setCodeImage] = useState<File | null>(null);
-    const [extractedText, setExtractedText] = useState("");
-    const [summary, setSummary] = useState("");
-    const [extractedCode, setExtractedCode] = useState("");
-    const [aiResponse, setAiResponse] = useState("");
-    const [customPrompt, setCustomPrompt] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [processingCode, setProcessingCode] = useState(false);
+const predefinedPrompts = {
+  medical: "Summarize this medical report concisely.",
+  receipt: "Summarize this receipt, extracting total amounts.",
+  prescription: "Summarize this prescription, highlighting key medications.",
+};
 
-    const handleUpload = async () => {
-        if (!file) return alert("Please select a file!");
+const Home = () => {
+  const [files, setFiles] = useState<File[]>([]);
+  const [extractedText, setExtractedText] = useState<string>("");
+  const [summary, setSummary] = useState<string>("");
+  const [customPrompt, setCustomPrompt] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-        const formData = new FormData();
-        formData.append("file", file);
+  const handleFileSelection = (selectedFiles: FileList) => {
+    setFiles(Array.from(selectedFiles));
+  };
 
-        setLoading(true);
-        setError(null);
-        setExtractedText("");
-        setSummary("");
+  const handleExtractText = async () => {
+    let combinedText = "";
+    for (const file of files) {
+      const text = await extractTextFromImage(file);
+      combinedText += `\n${text}`;
+    }
+    setExtractedText(combinedText);
+  };
 
-        try {
-            const response = await axios.post("http://127.0.0.1:8000/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
+  const handleSummarize = async () => {
+    if (!extractedText) return alert("Please extract text first!");
+    setLoading(true);
+    setError(null);
 
-            console.log("✅ Full Response from Backend:", response.data);
+    try {
+      const result = await summarizeText(extractedText, customPrompt);
+      setSummary(result);
+    } catch (error) {
+      console.error("Error summarizing text:", error);
+      setError("Failed to summarize the text.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            setExtractedText(response.data.extracted_text || "No text extracted.");
-            setSummary(response.data.summary || "No summary generated.");
+  const handlePromptClick = (prompt: string) => {
+    setCustomPrompt(prompt);
+  };
 
-        } catch (error) {
-            console.error("❌ Axios Error:", error);
-            setError("An error occurred while processing the document.");
-        } finally {
-            setLoading(false);
-        }
-    };
+  return (
+    <div className="min-h-screen p-8 bg-gray-100 text-black">
+      <h1 className="text-3xl font-bold text-center mb-4">Medical Report Summarizer</h1>
+      
+      <FileUploader onFilesSelected={handleFileSelection} />
 
-    const handleCodeExtraction = async () => {
-        if (!codeImage) return alert("Please select a code image!");
+      <button
+        onClick={handleExtractText}
+        className="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg"
+      >
+        Extract Text
+      </button>
 
-        const formData = new FormData();
-        formData.append("file", codeImage);
+      <textarea
+        className="w-full h-40 p-2 mt-4 border rounded"
+        value={extractedText}
+        onChange={(e) => setExtractedText(e.target.value)}
+      />
 
-        setProcessingCode(true);
-        setError(null);
-        setExtractedCode("");
-        setAiResponse("");
+      <h2 className="mt-6 text-xl font-semibold">Summarization Options:</h2>
+      <div className="flex space-x-2 mt-2">
+        {Object.entries(predefinedPrompts).map(([key, prompt]) => (
+          <button
+            key={key}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+            onClick={() => handlePromptClick(prompt)}
+          >
+            {key.charAt(0).toUpperCase() + key.slice(1)}
+          </button>
+        ))}
+      </div>
 
-        try {
-            const response = await axios.post("http://127.0.0.1:8000/extract_code", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
+      <input
+        type="text"
+        placeholder="Custom prompt..."
+        className="w-full p-2 mt-4 border rounded"
+        value={customPrompt}
+        onChange={(e) => setCustomPrompt(e.target.value)}
+      />
 
-            console.log("✅ Code Extraction Response:", response.data);
-            setExtractedCode(response.data.extracted_code || "No code detected.");
+      <button
+        onClick={handleSummarize}
+        className="mt-4 bg-purple-500 text-white px-4 py-2 rounded-lg"
+        disabled={loading}
+      >
+        {loading ? "Processing..." : "Summarize with Custom Prompt"}
+      </button>
 
-        } catch (error) {
-            console.error("❌ Axios Error:", error);
-            setError("An error occurred while extracting code.");
-        } finally {
-            setProcessingCode(false);
-        }
-    };
+      {error && <p className="text-red-500 mt-4">{error}</p>}
 
-    const handleAIAction = async (action: "generate" | "fix" | "explain" | "custom", customPrompt: string = "") => {
-        if (!extractedCode) {
-            alert("No extracted code available!");
-            return;
-        }
-    
-        const payload = action === "custom" 
-            ? { code: extractedCode, custom_prompt: customPrompt }
-            : { code: extractedCode };
-    
-        try {
-            const response = await axios.post(`http://127.0.0.1:8000/${action}`, payload);
-    
-            console.log(`✅ AI ${action} Response:`, response.data);
-            setAiResponse(response.data.result || "No response from AI.");
-    
-        } catch (error) {
-            const err = error as any;
-            console.error(`❌ Axios Error:`, err.response?.data || err.message);
-            setError(`An error occurred while performing ${action}.`);
-        }
-    };
-    
-    return (
-        <div className="max-w-lg mx-auto my-12 text-center">
-            <h1 className="text-2xl font-bold">AI-Powered Document Scanner</h1>
+      <textarea className="w-full h-40 p-2 mt-4 border rounded" value={summary} readOnly />
+    </div>
+  );
+};
 
-            <div className="mb-8 p-5 border border-gray-300 rounded">
-                <h2 className="text-xl font-semibold">Process Text Documents</h2>
-                <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} className="mt-2" />
-                <button onClick={handleUpload} disabled={loading} className="ml-3 px-4 py-2 bg-blue-500 text-white rounded">
-                    {loading ? "Processing..." : "Upload"}
-                </button>
-                {error && <p className="text-red-500">❌ {error}</p>}
-                {extractedText && <div className="mt-5 text-left"><h3 className="font-semibold">Extracted Text:</h3><p>{extractedText}</p></div>}
-                {summary && <div className="mt-5 text-left bg-black text-white p-3 rounded"><h3 className="font-semibold">Summary:</h3><p>{summary}</p></div>}
-            </div>
-
-            <div className="p-5 border border-gray-300 rounded">
-                <h2 className="text-xl font-semibold">Extract Code from Image</h2>
-                <input type="file" onChange={(e) => setCodeImage(e.target.files?.[0] || null)} className="mt-2" />
-                <button onClick={handleCodeExtraction} disabled={processingCode} className="ml-3 px-4 py-2 bg-blue-500 text-white rounded">
-                    {processingCode ? "Extracting..." : "Extract Code"}
-                </button>
-                {extractedCode && <div className="mt-5 text-left bg-gray-900 text-white p-3 rounded"><h3 className="font-semibold">Extracted Code:</h3><pre className="whitespace-pre-wrap break-words">{extractedCode}</pre></div>}
-
-                <div className="mt-4 flex gap-2">
-                    <button onClick={() => handleAIAction("generate")} className="px-4 py-2 bg-blue-500 text-white rounded">Generate</button>
-                    <button onClick={() => handleAIAction("fix")} className="px-4 py-2 bg-blue-500 text-white rounded">Fix</button>
-                    <button onClick={() => handleAIAction("explain")} className="px-4 py-2 bg-blue-500 text-white rounded">Explain</button>
-                </div>
-
-                <div className="mt-4 text-left">
-                    <h3 className="font-semibold">Custom AI Prompt:</h3>
-                    <input type="text" value={customPrompt} onChange={(e) => setCustomPrompt(e.target.value)} placeholder="Enter your custom prompt..." className="w-full p-2 mt-2 border border-gray-300 rounded" />
-                    <button onClick={() => handleAIAction("custom", customPrompt)} className="mt-3 px-4 py-2 bg-blue-500 text-white rounded">Submit Prompt</button>
-                </div>
-                {/* ✅ AI Response Section */}
-                {aiResponse && (
-                    <div className="text-left mt-5 bg-gray-900 text-white p-3 rounded-lg overflow-scroll">
-                        <h3 className="text-lg font-semibold">AI Response:</h3>
-                        <pre className="whitespace-pre-wrap break-words">{aiResponse}</pre>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-}
+export default Home;
