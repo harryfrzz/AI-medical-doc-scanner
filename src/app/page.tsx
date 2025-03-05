@@ -5,7 +5,7 @@ import { summarizeText } from "./lib/geminiAPI";
 import FileUploader from "./Components/FileUploader";
 
 const predefinedPrompts = {
-  medical: "Summarize this medical report concisely.",
+  medical: "Summarise this medical report in a structured manner with all the information included",
   receipt: "Summarize this receipt, extracting total amounts.",
   prescription: "Summarize this prescription, highlighting key medications.",
 };
