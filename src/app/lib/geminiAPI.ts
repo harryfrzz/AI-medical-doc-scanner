@@ -8,9 +8,6 @@ export async function summarizeText(text: string, prompt: string): Promise<strin
       `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         contents: [{ parts: [{ text: `${prompt}\n\n${text}` }] }],
-        generationConfig:{
-          maxOutputToken: 2000
-        }
       },
       {
         headers: {

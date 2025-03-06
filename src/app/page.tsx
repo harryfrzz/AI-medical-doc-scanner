@@ -17,21 +17,44 @@ const Home = () => {
   const [customPrompt, setCustomPrompt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [textExtracted, setTextExtracted] = useState<boolean>(false); // Flag to check if text is already extracted
 
   const handleFileSelection = (selectedFiles: FileList) => {
     setFiles(Array.from(selectedFiles));
+    setTextExtracted(false); // Reset the flag when new files are selected
   };
 
-  const handleExtractText = async () => {
-    let combinedText = "";
-    for (const file of files) {
-      const text = await extractTextFromImage(file);
-      combinedText += `\n${text}`;
+  const handleExtractAndSummarize = async (prompt: string) => {
+    if (files.length === 0) return alert("Please select files first!");
+    setLoading(true);
+    setError(null);
+
+    try {
+      let combinedText = extractedText;
+
+      // Extract text from files if not already extracted
+      if (!textExtracted) {
+        combinedText = "";
+        for (const file of files) {
+          const text = await extractTextFromImage(file);
+          combinedText += `\n${text}`;
+        }
+        setExtractedText(combinedText);
+        setTextExtracted(true); // Set the flag to true after extraction
+      }
+
+      // Summarize the extracted text
+      const result = await summarizeText(combinedText, prompt);
+      setSummary(result);
+    } catch (error) {
+      console.error("Error processing request:", error);
+      setError("Failed to process the request.");
+    } finally {
+      setLoading(false);
     }
-    setExtractedText(combinedText);
   };
 
-  const handleSummarize = async () => {
+  const handleCustomSummarize = async () => {
     if (!extractedText) return alert("Please extract text first!");
     setLoading(true);
     setError(null);
@@ -47,22 +70,11 @@ const Home = () => {
     }
   };
 
-  const handlePromptClick = (prompt: string) => {
-    setCustomPrompt(prompt);
-  };
-
   return (
     <div className="min-h-screen p-8 bg-gray-100 text-black">
       <h1 className="text-3xl font-bold text-center mb-4">Medical Report Summarizer</h1>
       
       <FileUploader onFilesSelected={handleFileSelection} />
-
-      <button
-        onClick={handleExtractText}
-        className="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg"
-      >
-        Extract Text
-      </button>
 
       <textarea
         className="w-full h-40 p-2 mt-4 border rounded"
@@ -76,7 +88,8 @@ const Home = () => {
           <button
             key={key}
             className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-            onClick={() => handlePromptClick(prompt)}
+            onClick={() => handleExtractAndSummarize(prompt)}
+            disabled={loading}
           >
             {key.charAt(0).toUpperCase() + key.slice(1)}
           </button>
@@ -92,7 +105,7 @@ const Home = () => {
       />
 
       <button
-        onClick={handleSummarize}
+        onClick={handleCustomSummarize}
         className="mt-4 bg-purple-500 text-white px-4 py-2 rounded-lg"
         disabled={loading}
       >
