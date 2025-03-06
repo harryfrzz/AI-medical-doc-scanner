@@ -18,6 +18,8 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [textExtracted, setTextExtracted] = useState<boolean>(false); // Flag to check if text is already extracted
+  const [selectedOption, setSelectedOption] = useState<string>("Select an option");
+  const [menuOpen, setMenuOpen] = useState<boolean>(false); // State to manage dropdown visibility
 
   const handleFileSelection = (selectedFiles: FileList) => {
     setFiles(Array.from(selectedFiles));
@@ -70,6 +72,19 @@ const Home = () => {
     }
   };
 
+  const handleOptionChange = (option: keyof typeof predefinedPrompts | "Custom Prompt") => {
+    setSelectedOption(option);
+    setMenuOpen(false); // Close the dropdown menu when an option is selected
+  };
+
+  const handleButtonClick = () => {
+    if (selectedOption === "Custom Prompt") {
+      handleCustomSummarize();
+    } else {
+      handleExtractAndSummarize(predefinedPrompts[selectedOption as keyof typeof predefinedPrompts]);
+    }
+  };
+
   return (
     <div className="min-h-screen p-8 bg-gray-100 text-black">
       <h1 className="text-3xl font-bold text-center mb-4">Medical Report Summarizer</h1>
@@ -82,34 +97,79 @@ const Home = () => {
         onChange={(e) => setExtractedText(e.target.value)}
       />
 
-      <h2 className="mt-6 text-xl font-semibold">Summarization Options:</h2>
-      <div className="flex space-x-2 mt-2">
-        {Object.entries(predefinedPrompts).map(([key, prompt]) => (
+      <div className="relative inline-block text-left mt-6">
+        <div>
           <button
-            key={key}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-            onClick={() => handleExtractAndSummarize(prompt)}
-            disabled={loading}
+            type="button"
+            className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+            id="options-menu"
+            aria-haspopup="true"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(!menuOpen)} // Toggle dropdown visibility
           >
-            {key.charAt(0).toUpperCase() + key.slice(1)}
+            {selectedOption}
+            <svg
+              className="-mr-1 ml-2 h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
           </button>
-        ))}
+        </div>
+
+        {menuOpen && (
+          <div
+            className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="options-menu"
+          >
+            <div className="py-1" role="none">
+              {Object.keys(predefinedPrompts).map((option) => (
+                <button
+                  key={option}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                  role="menuitem"
+                  onClick={() => handleOptionChange(option as keyof typeof predefinedPrompts)}
+                >
+                  {option.charAt(0).toUpperCase() + option.slice(1)}
+                </button>
+              ))}
+              <button
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                role="menuitem"
+                onClick={() => handleOptionChange("Custom Prompt")}
+              >
+                Custom Prompt
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      <input
-        type="text"
-        placeholder="Custom prompt..."
-        className="w-full p-2 mt-4 border rounded"
-        value={customPrompt}
-        onChange={(e) => setCustomPrompt(e.target.value)}
-      />
+      {selectedOption === "Custom Prompt" && (
+        <input
+          type="text"
+          placeholder="Custom prompt..."
+          className="w-full p-2 mt-4 border rounded"
+          value={customPrompt}
+          onChange={(e) => setCustomPrompt(e.target.value)}
+        />
+      )}
 
       <button
-        onClick={handleCustomSummarize}
+        onClick={handleButtonClick}
         className="mt-4 bg-purple-500 text-white px-4 py-2 rounded-lg"
         disabled={loading}
       >
-        {loading ? "Processing..." : "Summarize with Custom Prompt"}
+        {loading ? "Processing..." : `Summarize with ${selectedOption}`}
       </button>
 
       {error && <p className="text-red-500 mt-4">{error}</p>}
