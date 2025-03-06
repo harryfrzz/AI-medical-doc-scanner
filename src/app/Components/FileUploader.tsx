@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 interface FileUploaderProps {
   onFilesSelected: (files: FileList) => void;
@@ -6,6 +6,7 @@ interface FileUploaderProps {
 
 const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected }) => {
   const [fileNames, setFileNames] = useState<string[]>([]);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -14,8 +15,31 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected }) => {
     }
   };
 
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+    if (event.dataTransfer.files) {
+      onFilesSelected(event.dataTransfer.files);
+      setFileNames(Array.from(event.dataTransfer.files).map((file) => file.name));
+    }
+  };
+
   return (
-    <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg">
+    <div
+      className={`p-4 border-2 border-dashed rounded-lg ${isDragging ? "border-blue-500" : "border-gray-300"}`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
       <input
         type="file"
         multiple
@@ -30,6 +54,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected }) => {
       >
         Upload Files
       </label>
+      <p className="mt-2 text-sm text-gray-700">or drag and drop files here</p>
       <ul className="mt-2">
         {fileNames.map((name, index) => (
           <li key={index} className="text-sm text-gray-700">
