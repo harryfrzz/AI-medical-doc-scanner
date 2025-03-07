@@ -27,11 +27,11 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({
   };
 
   return (
-    <div className="relative inline-block text-left mt-6">
+    <div className="flex items-center relative text-left gap-5">
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+          className="inline-flex justify-center w-[180px] rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
           id="options-menu"
           aria-haspopup="true"
           aria-expanded={menuOpen}
@@ -56,7 +56,7 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({
 
       {menuOpen && (
         <div
-          className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+          className="origin-top-right absolute right-0 mb-10 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="options-menu"
@@ -95,10 +95,10 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({
 
       <button
         onClick={handleButtonClick}
-        className="mt-4 bg-purple-500 text-white px-4 py-2 rounded-lg"
+        className=" bg-purple-500 text-white px-4 py-2 rounded-lg"
         disabled={loading}
       >
-        {loading ? "Processing..." : `Summarize with ${selectedOption}`}
+        {loading ? "Processing..." : `Generate`}
       </button>
     </div>
   );

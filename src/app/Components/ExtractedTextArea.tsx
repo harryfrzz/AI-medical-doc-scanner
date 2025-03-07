@@ -8,7 +8,7 @@ interface ExtractedTextAreaProps {
 const ExtractedTextArea: React.FC<ExtractedTextAreaProps> = ({ extractedText, setExtractedText }) => {
   return (
     <textarea
-      className="w-full h-40 p-2 mt-4 border rounded"
+      className="w-[1000px] h-50 p-2 mt-4 border rounded"
       value={extractedText}
       onChange={(e) => setExtractedText(e.target.value)}
     />
