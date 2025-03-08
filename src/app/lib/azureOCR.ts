@@ -2,13 +2,11 @@ import Cors from "cors";
 import { AzureKeyCredential, DocumentAnalysisClient } from "@azure/ai-form-recognizer";
 import { NextApiRequest, NextApiResponse } from "next";
 
-// Initialize CORS middleware
 const cors = Cors({
     origin: "*",
     methods: ["GET", "POST", "OPTIONS"],
   });
   
-  // Helper function to run middleware
   function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
     return new Promise((resolve, reject) => {
       fn(req, res, (result: any) => {

@@ -5,7 +5,6 @@ import { summarizeText } from "./lib/geminiAPI";
 import ExtractedTextArea from "./Components/ExtractedTextArea";
 import InputBar from "./Components/InputBar";
 import InfoButton from "./Components/InfoButton";
-import Markdown from 'marked-react';
 import TypingAnimation from "./Components/TypignAnimation";
 
 const predefinedPrompts = {
