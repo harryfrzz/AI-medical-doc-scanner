@@ -61,7 +61,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected }) => {
       >
         Upload Files
       </label>
-      <ul className={`absolute -top-10 w-auto flex justify-center bg-gray-500 p-2 rounded-lg ${files.length === 0 ? "hidden" : ""}`}>
+      <ul className={`absolute -top-11 w-auto flex justify-center bg-gray-500 p-2 rounded-lg ${files.length === 0 ? "hidden" : ""}`}>
         {files.map((file, index) => (
           <li key={index} className="text-sm text-gray-200 flex items-center">
             {file.name}

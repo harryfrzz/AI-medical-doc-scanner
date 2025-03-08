@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const GEMINI_API_KEY = "AIzaSyCRKzpAMDfxHezLuzteaARVjRpfsEMxkK4"; // Ensure this is set
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY; 
 
 export async function summarizeText(text: string, prompt: string): Promise<string> {
   try {
@@ -16,8 +16,6 @@ export async function summarizeText(text: string, prompt: string): Promise<strin
         timeout: 60000
       }
     );
-
-    console.log("Gemini API Response:", response.data); // Debugging log
 
     return response.data.candidates?.[0]?.content?.parts?.[0]?.text || "No summary generated";
   } catch (error) {

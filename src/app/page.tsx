@@ -5,6 +5,8 @@ import { summarizeText } from "./lib/geminiAPI";
 import ExtractedTextArea from "./Components/ExtractedTextArea";
 import InputBar from "./Components/InputBar";
 import InfoButton from "./Components/InfoButton";
+import Markdown from 'marked-react';
+import TypingAnimation from "./Components/TypignAnimation";
 
 const predefinedPrompts = {
   medical: "Summarise this medical report in a structured manner with all the information included",
@@ -84,11 +86,7 @@ const Home = () => {
       <div className="flex flex-col items-center h-[100vh] p-8 bg-gray-600  rounded-b-none rounded-t-2xl text-black overflow-scroll" id="container">
         <div className="w-[1000px]">
             <div className="flex justify-start w-full">
-              <h1 className="text-5xl font-bold mb-4">Medical Report Summarizer</h1>
-            </div>
-            
-            <div className="flex justify-start w-full">
-              <h1 className="text-2xl font-bold mb-4">Extracted Text</h1>
+              <h1 className="text-4xl font-bold mb-4">CliniQ</h1>
             </div>
             <ExtractedTextArea extractedText={extractedText} setExtractedText={setExtractedText} />
 
@@ -96,7 +94,9 @@ const Home = () => {
               <h1 className="text-2xl font-bold mb-4">Summary</h1>
             </div>
             {error && <p className="text-red-500">{error}</p>}
-            <textarea className="w-full h-screen p-2 mb-46 outline-none text-wrap" value={summary} readOnly />
+            <div className="mb-62 text-xl">
+                <TypingAnimation text={summary}/>
+            </div>
           </div>
 
           <div className="flex justify-center">
