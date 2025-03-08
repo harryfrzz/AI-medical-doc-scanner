@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const GEMINI_API_KEY = "AIzaSyCRKzpAMDfxHezLuzteaARVjRpfsEMxkK4"; // Ensure this is set
+const GEMINI_API_KEY = "your api key"; // Ensure this is set
 
 export async function summarizeText(text: string, prompt: string): Promise<string> {
   try {
