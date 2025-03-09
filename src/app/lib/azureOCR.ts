@@ -1,7 +1,7 @@
 import { AzureKeyCredential, DocumentAnalysisClient } from "@azure/ai-form-recognizer";
 
-const AZURE_OCR_ENDPOINT = "https://ai-medical.cognitiveservices.azure.com/";
-const AZURE_OCR_KEY = "EUgJOXnmZw6Y3Pg4ExeQYb3q4TOyLECvhkeACxexeaW3l7NoeXBTJQQJ99BCACYeBjFXJ3w3AAALACOGEqQj";
+const AZURE_OCR_ENDPOINT = process.env.AZURE_OCR_ENDPOINT || "";
+const AZURE_OCR_KEY = process.env.AZURE_OCR_KEY || "";
 
 const client = new DocumentAnalysisClient(AZURE_OCR_ENDPOINT, new AzureKeyCredential(AZURE_OCR_KEY));
 
