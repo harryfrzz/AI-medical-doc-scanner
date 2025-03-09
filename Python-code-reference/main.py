@@ -5,11 +5,11 @@ import requests
 import json
 
 # Azure API Configurations
-AZURE_OCR_ENDPOINT = "https://ai-doc-scanner-harryfrz.cognitiveservices.azure.com/vision/v3.2/ocr"
-AZURE_OCR_KEY = "F4PpW9iGHMLtLjlKwBXKpcHZ4hBaf9jW4KTa6YumDgOCGNQnvxVWJQQJ99BCACGhslBXJ3w3AAAFACOGzkqg"
+AZURE_OCR_ENDPOINT = "YOUR_ENDPOINT_HERE"
+AZURE_OCR_KEY = "YOUR_API_KEY_HERE"
 
-AZURE_OPENAI_ENDPOINT = "https://harik-m7snaavi-eastus2.cognitiveservices.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview"
-AZURE_OPENAI_KEY = "4Hdf5VPQs8pQECgu4cerQwZvape5kPC27NSOtMrdPBBEWyIQcnjTJQQJ99BCACHYHv6XJ3w3AAAAACOGJslb"
+AZURE_OPENAI_ENDPOINT = "YOUR_ENDPOINT_HERE"
+AZURE_OPENAI_KEY = "YOUR_API_KEY_HERE"
 
 app = FastAPI()
 
