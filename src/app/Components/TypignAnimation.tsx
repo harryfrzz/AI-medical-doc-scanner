@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 
 interface TypingAnimationProps {
   text: string;
-  speed?: number; // Speed of typing in milliseconds
+  speed?: number;
 }
 
 const TypingAnimation: React.FC<TypingAnimationProps> = ({ text, speed = 5 }) => {

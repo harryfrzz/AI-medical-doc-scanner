@@ -2,10 +2,6 @@ import axios from "axios";
 
 const GEMINI_API_KEY = process.env.GEMINI_API;
 
-if (!GEMINI_API_KEY) {
-  throw new Error("GEMINI_API_KEY is not defined in the environment variables");
-}
-
 export async function summarizeText(text: string, prompt: string): Promise<string> {
   try {
     const response = await axios.post(
