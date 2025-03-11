@@ -31,7 +31,7 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-[180px] rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+          className="inline-flex items-center justify-center w-[180px] h-11 rounded-lg border border-[rgb(43,43,43)] shadow-sm px-4 py-2 bg-black text-sm font-medium text-white focus:outline-none"
           id="options-menu"
           aria-haspopup="true"
           aria-expanded={menuOpen}
@@ -83,7 +83,7 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({
         </div>
       )}
 
-      {selectedOption === "Custom Prompt" && (
+      {/*{selectedOption === "Custom Prompt" && (
         <input
           type="text"
           placeholder="Custom prompt..."
@@ -91,11 +91,11 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({
           value={customPrompt}
           onChange={(e) => setCustomPrompt(e.target.value)}
         />
-      )}
+      )}*/}
 
       <button
         onClick={handleButtonClick}
-        className=" bg-purple-500 text-white px-4 py-2 rounded-lg"
+        className=" bg-black border border-[rgb(43,43,43)] text-white px-4 py-2 rounded-lg"
         disabled={loading}
       >
         {loading ? "Processing..." : `Generate`}

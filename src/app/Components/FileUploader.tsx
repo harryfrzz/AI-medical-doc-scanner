@@ -54,7 +54,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected }) => {
       />
       <label
         htmlFor="fileInput"
-        className={`flex justify-center items-center h-[65px] p-4 w-[520px] border-2 text-white border-dashed rounded-lg ${isDragging ? "border-blue-500" : "border-gray-300"}`}
+        className={`flex justify-center items-center h-[65px] p-4 w-[520px] border-2 text-white border-dashed rounded-lg ${isDragging ? "border-blue-500" : "border-gray-700"}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}

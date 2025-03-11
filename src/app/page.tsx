@@ -5,12 +5,14 @@ import { summarizeText } from "./lib/geminiAPI";
 import ExtractedTextArea from "./Components/ExtractedTextArea";
 import InputBar from "./Components/InputBar";
 import InfoButton from "./Components/InfoButton";
-import TypingAnimation from "./Components/TypignAnimation";
+import Markdown from "marked-react";
+import { TextAnimate } from "@/components/magicui/text-animate";
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 const predefinedPrompts = {
-  medical: "Summarise this medical report in a structured manner with all the information included",
-  receipt: "Summarize this receipt, extracting total amounts.",
-  prescription: "Summarize this prescription, highlighting key medications.",
+  Medical: "Summarise this medical report in a structured manner with all the information included",
+  Report: "Summarize this receipt, extracting total amounts.",
+  Prescription: "Summarize this prescription, highlighting key medications.",
 };
 
 const Home = () => {
@@ -42,7 +44,7 @@ const Home = () => {
           combinedText += `\n${text}`;
         }
         setExtractedText(combinedText);
-        setTextExtracted(true); // Set the flag to true after extraction
+        setTextExtracted(true);
       }
 
       // Summarize the extracted text
@@ -82,10 +84,11 @@ const Home = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center h-[100vh] p-8 bg-gray-600  rounded-b-none rounded-t-2xl text-black overflow-scroll" id="container">
+      <div className="flex flex-col items-center h-[100vh] border border-[rgb(34,34,34)] p-8 bg-black rounded-b-none rounded-t-2xl text-black overflow-scroll" id="container">
         <div className="w-[1000px]">
-            <div className="flex justify-start w-full">
-              <h1 className="text-4xl font-bold mb-4">CliniQ</h1>
+            <div className="flex flex-col gap-5 justify-start w-full">
+              <h1 className="text-5xl text-white font-bold">CliniQ</h1>
+              <h1 className="text-2xl text-white font-bold mb-10">AI Medical Report Summariser</h1>
             </div>
             <ExtractedTextArea extractedText={extractedText} setExtractedText={setExtractedText} />
 
@@ -93,8 +96,11 @@ const Home = () => {
               <h1 className="text-2xl font-bold mb-4">Summary</h1>
             </div>
             {error && <p className="text-red-500">{error}</p>}
-            <div className="mb-62 text-xl">
-                <TypingAnimation text={summary}/>
+            <div className="mb-62 text-xl text-white">
+              <TextAnimate animation="blurIn" as="p" className="text-white">                  
+             {summary}
+              </TextAnimate>
+                
             </div>
           </div>
 
