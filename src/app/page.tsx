@@ -24,7 +24,7 @@ const Home = () => {
 
   const handleFileSelection = (selectedFiles: FileList) => {
     setFiles(Array.from(selectedFiles));
-    setTextExtracted(false); // Reset the flag when new files are selected
+    setTextExtracted(false); 
   };
 
   const handleExtractAndSummarize = async (prompt: string) => {
