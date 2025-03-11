@@ -6,9 +6,6 @@ import ExtractedTextArea from "./Components/ExtractedTextArea";
 import InputBar from "./Components/InputBar";
 import InfoButton from "./Components/InfoButton";
 import Markdown from "marked-react";
-import { TextAnimate } from "@/components/magicui/text-animate";
-import { BlurFade } from "@/components/magicui/blur-fade";
-
 const predefinedPrompts = {
   Medical: "Summarise this medical report in a structured manner with all the information included",
   Report: "Summarize this receipt, extracting total amounts.",
@@ -97,10 +94,9 @@ const Home = () => {
             </div>
             {error && <p className="text-red-500">{error}</p>}
             <div className="mb-62 text-xl text-white">
-              <TextAnimate animation="blurIn" as="p" className="text-white">                  
-             {summary}
-              </TextAnimate>
-                
+                <Markdown>
+                  {summary}
+                </Markdown>                    
             </div>
           </div>
 

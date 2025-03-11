@@ -12,7 +12,7 @@ const ExtractedTextArea: React.FC<ExtractedTextAreaProps> = ({ extractedText, se
         <h1 className="text-sm ml-3 text-white">Extracted Text</h1>
       </div>   
         <textarea
-        className="w-full h-50 p-5"
+        className="w-full h-50 p-5 text-white outline-none"
         value={extractedText}
         onChange={(e) => setExtractedText(e.target.value)}
       />

@@ -31,7 +31,7 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({
       <div>
         <button
           type="button"
-          className="inline-flex items-center justify-center w-[180px] h-11 rounded-lg border border-[rgb(43,43,43)] shadow-sm px-4 py-2 bg-black text-sm font-medium text-white focus:outline-none"
+          className="inline-flex items-center justify-center w-[180px] h-11 rounded-lg border border-[rgb(43,43,43)] px-4 py-2 bg-black text-sm  text-white focus:outline-none"
           id="options-menu"
           aria-haspopup="true"
           aria-expanded={menuOpen}

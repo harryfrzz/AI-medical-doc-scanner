@@ -17,7 +17,7 @@ body::-webkit-scrollbar{
 body {
   padding-left: 15px;
   padding-right: 15px;
-  padding-top: 40px;
+  padding-top: 20px;
   overflow: hidden;
   background-color: #0e0e0e;
 }
