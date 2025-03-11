@@ -14,8 +14,8 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({
   predefinedPrompts,
   selectedOption,
   setSelectedOption,
-  customPrompt,
-  setCustomPrompt,
+  /*customPrompt,
+  setCustomPrompt,*/
   loading,
   handleButtonClick,
 }) => {

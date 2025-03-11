@@ -88,9 +88,11 @@ const Home = () => {
               <h1 className="text-2xl text-white font-bold mb-10">AI Medical Report Summariser</h1>
             </div>
             <ExtractedTextArea extractedText={extractedText} setExtractedText={setExtractedText} />
-
             <div className="flex justify-start w-full mt-10">
-              <h1 className="text-2xl font-bold mb-4">Summary</h1>
+              <div className="w-full border border-[rgb(24,24,24)]"/>
+            </div>
+            <div className="flex justify-start w-full mt-10">
+              <h1 className="text-2xl font-bold mb-4 text-white">Summary</h1>
             </div>
             {error && <p className="text-red-500">{error}</p>}
             <div className="mb-62 text-xl text-white">
