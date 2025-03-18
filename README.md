@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Medical Document Scanner  
 
-## Getting Started
+## Overview  
+The **AI Medical Document Scanner** is a powerful tool designed to extract, process, and summarize key information from medical documents such as patient reports, receipts, and prescriptions. Built with **Next.js, TypeScript, React, Tailwind CSS**, and integrated with **Azure OCR and Gemini AI**, this application streamlines medical document management by automating text extraction and summarization.
 
-First, run the development server:
+## Features  
+- 📄 **Supports Multiple Formats**: Upload PDFs, images (JPG, PNG), and DOC files.  
+- 🔍 **OCR-Powered Text Extraction**: Uses **Azure OCR** to extract text from images and scanned documents.  
+- 🧠 **AI-Powered Summarization**: Processes extracted text with **Gemini AI** to generate concise summaries.  
+- ⚡ **Predefined Processing Options**: Quick actions for summarizing **patient reports, receipts, and prescriptions**.  
+- 🏎️ **Fast & Secure**: Optimized for performance and security using modern web technologies.  
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🛠️ Tech Stack  
+- **Frontend**: Next.js, React, TypeScript, Tailwind CSS  
+- **Backend**: FastAPI  
+- **AI & OCR**: Azure OCR, Gemini AI  
+- **Storage & Processing**: Cloud-based API integrations  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📂 Installation & Setup  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites  
+Ensure you have the following installed:  
+- Node.js (v16 or later)  
+- Python (for FastAPI backend)  
+- Azure OCR & Gemini API keys  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Frontend Setup  
+```sh
+git clone https://github.com/yourusername/ai-medical-doc-scanner.git  
+cd ai-medical-doc-scanner/frontend  
+npm install  
+npm run dev  
