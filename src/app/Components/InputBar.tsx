@@ -12,7 +12,7 @@ interface constraints {
   }
 export default function InputBar({predefinedPrompts,selectedOption,setSelectedOption,setCustomPrompt,customPrompt,loading,handleButtonClick,onFilesSelected}: constraints){
     return(
-        <div className="flex w-[1000px] p-5 h-[100px] bg-black fixed bottom-5 rounded-2xl justify-between items-center border border-[rgb(46,46,46)]">
+        <div className="flex w-[1000px] p-5 h-[100px] bg-[rgba(0,0,0,0.49)] fixed bottom-5 rounded-2xl backdrop-blur-2xl justify-between items-center border border-[rgb(46,46,46)]">
             <FileUploader onFilesSelected={onFilesSelected}/>
             <OptionsButton
                 predefinedPrompts={predefinedPrompts}
