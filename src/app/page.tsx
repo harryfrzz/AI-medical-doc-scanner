@@ -4,14 +4,13 @@ import { extractTextFromImage } from "./lib/azureOCR";
 import { summarizeText } from "./lib/geminiAPI";
 import ExtractedTextArea from "./Components/ExtractedTextArea";
 import InputBar from "./Components/InputBar";
-import InfoButton from "./Components/InfoButton";
 import Markdown from "marked-react";
 import { motion } from "framer-motion";
 
 const predefinedPrompts = {
-  Medical: "Summarise this medical report in a structured manner with all the information included",
-  Report: "Summarize this receipt, extracting total amounts.",
-  Prescription: "Summarize this prescription, highlighting key medications.",
+  Medical: "Summarise this medical report in a structured manner with all the information included,if the information is not based on a medical report then don't summarize it",
+  Report: "Summarize this receipt, extracting total amounts.if the information is not based on a medical receipt then don't summarize it",
+  Prescription: "Summarize this prescription, highlighting key medications.if the information is not based on a medical prescription then don't summarize it",
 };
 
 const Home = () => {
@@ -89,24 +88,24 @@ const Home = () => {
     }
   };
 
-  // Text typing animation effect
-  useEffect(() => {
-    if (summary && !loading) {
-      let currentIndex = 0;
-      setDisplayedSummary("");
-      
-      const typingInterval = setInterval(() => {
-        if (currentIndex < summary.length) {
-          setDisplayedSummary(prev => prev + summary[currentIndex]);
-          currentIndex++;
-        } else {
-          clearInterval(typingInterval);
-        }
-      }, 15); // Adjust typing speed here
-      
-      return () => clearInterval(typingInterval);
-    }
-  }, [summary, loading]);
+  // Text typing animation effect - FASTER SPEED
+useEffect(() => {
+  if (summary && !loading) {
+    let currentIndex = 0;
+    setDisplayedSummary("");
+    
+    const typingInterval = setInterval(() => {
+      if (currentIndex < summary.length) {
+        setDisplayedSummary(prev => prev + summary[currentIndex]);
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+      }
+    }, 2); // Changed from 15ms to 5ms for faster typing
+    
+    return () => clearInterval(typingInterval);
+  }
+}, [summary, loading]);
 
   return (
     <>
@@ -136,7 +135,7 @@ const Home = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
+            transition={{ duration: 0.8, delay: 1}}
           >
             <ExtractedTextArea extractedText={extractedText} setExtractedText={setExtractedText} />
           </motion.div>
@@ -173,7 +172,7 @@ const Home = () => {
               className="mb-62 text-xl text-white relative"
               initial={{ opacity: 0 }}
               animate={{ opacity: displayedSummary ? 1 : 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.1 }}
             >
               <Markdown>{displayedSummary}</Markdown>
               {loading && (
@@ -182,7 +181,7 @@ const Home = () => {
                 </div>
               )}
               {displayedSummary && summary !== displayedSummary && (
-                <span className="inline-block w-2 h-5 bg-blue-400 ml-1 animate-pulse"></span>
+                <span className="inline-block w-2 h-5 bg-white ml-1 animate-pulse"></span>
               )}
             </motion.div>
 
