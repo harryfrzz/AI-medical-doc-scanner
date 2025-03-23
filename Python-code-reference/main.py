@@ -147,7 +147,7 @@ async def upload_file(file: UploadFile = File(...)):
 async def extract_code(file: UploadFile = File(...)):
     try:
         image_bytes = await file.read()
-        print(f"Received code image: {file.filename}, Size: {len(image_bytes)} bytes")  # Debugging
+        print(f"image {file.filename}, Size: {len(image_bytes)} bytes")  # Debugging
 
         extracted_code = extract_text_from_image(image_bytes)
 
