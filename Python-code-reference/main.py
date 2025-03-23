@@ -1,4 +1,4 @@
-//This python code is based upon a code fixing AI agent based on azure not on the medical summarizer
+# This python code is based upon a code fixing AI agent based on azure not on the medical summarizer
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
