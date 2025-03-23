@@ -1,3 +1,4 @@
+//This python code is based upon a code fixing AI agent based on azure not on the medical summarizer
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -82,9 +83,9 @@ def process_code(code, action, custom_prompt=None):
     }
 
     prompts = {
-        "generate": "Generate a code snippet based on the following description.",
-        "fix": "Fix the errors in the following code snippet.",
-        "explain": "Explain what this code snippet does."
+        "generate":"enter the prompt required.",
+        "fix": "enter the prompt required.",
+        "explain": "enter the prompt required."
     }
 
     if action == "custom":
