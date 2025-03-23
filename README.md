@@ -8,7 +8,7 @@ The **AI Medical Document Scanner** is a powerful tool designed to extract, proc
 -  **OCR-Powered Text Extraction**: Uses **Azure OCR** to extract text from images and scanned documents.  
 -  **AI-Powered Summarization**: Processes extracted text with **Gemini AI** to generate concise summaries.  
 -  **Predefined Processing Options**: Quick actions for summarizing **patient reports, receipts, and prescriptions**.
--  **It contains a python code using FastAPI,Azure OCR & Azure OpenAI,but it is not used due to some compatibility issues & bugs.Feel free to check it out at [Python reference]("https://github.com/harryfrzz/AI-medical-doc-scanner/tree/main/Python-code-reference")**
+-  **It contains a python code using FastAPI,Azure OCR & Azure OpenAI,but it is not used due to some compatibility issues & bugs.Feel free to check it out at [Python reference](https://github.com/harryfrzz/AI-medical-doc-scanner/tree/main/Python-code-reference)**
 
 
 ## 🛠️ Tech Stack  
