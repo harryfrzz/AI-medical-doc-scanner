@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 import requests
 import json
 
-# Azure API Configurations
 AZURE_OCR_ENDPOINT = "YOUR_ENDPOINT_HERE"
 AZURE_OCR_KEY = "YOUR_API_KEY_HERE"
 
@@ -13,17 +12,15 @@ AZURE_OPENAI_KEY = "YOUR_API_KEY_HERE"
 
 app = FastAPI()
 
-# Enable CORS for frontend communication
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Match frontend
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["POST"],
     allow_headers=["*"],
     expose_headers=["Content-Type"],
 )
 
-# Function to extract text from image using Azure OCR
 def extract_text_from_image(image_bytes):
     headers = {
         "Ocp-Apim-Subscription-Key": AZURE_OCR_KEY,
@@ -50,7 +47,6 @@ def extract_text_from_image(image_bytes):
     except json.JSONDecodeError:
         raise HTTPException(status_code=500, detail="Invalid OCR response format")
 
-# Function to summarize text using Azure OpenAI
 def summarize_text(extracted_text):
     headers = {
         "Content-Type": "application/json",
@@ -79,21 +75,18 @@ def summarize_text(extracted_text):
     except KeyError:
         raise HTTPException(status_code=500, detail="Invalid OpenAI response format")
 
-# Function to process code using Azure OpenAI (for generate, fix, explain)
 def process_code(code, action, custom_prompt=None):
     headers = {
         "Content-Type": "application/json",
         "api-key": AZURE_OPENAI_KEY
     }
 
-    # Default prompts for predefined actions
     prompts = {
         "generate": "Generate a code snippet based on the following description.",
         "fix": "Fix the errors in the following code snippet.",
         "explain": "Explain what this code snippet does."
     }
 
-    # If action is 'custom', use the provided custom prompt
     if action == "custom":
         if not custom_prompt:
             raise HTTPException(status_code=400, detail="Custom prompt is required for 'custom' action.")
@@ -130,7 +123,7 @@ def process_code(code, action, custom_prompt=None):
 async def upload_file(file: UploadFile = File(...)):
     try:
         image_bytes = await file.read()
-        print(f"📸 Received file: {file.filename}, Size: {len(image_bytes)} bytes")  # Debugging
+        print(f"{file.filename}, Size: {len(image_bytes)} bytes")  # Debugging
 
         extracted_text = extract_text_from_image(image_bytes)
 
@@ -143,18 +136,18 @@ async def upload_file(file: UploadFile = File(...)):
                 "summary": summary
             }
 
-        print("🚀 Sending Response to Frontend:", response)  # Debugging
+        print("response", response) 
         return JSONResponse(content=response)
 
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f"Error: {str(e)}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @app.post("/extract_code")
 async def extract_code(file: UploadFile = File(...)):
     try:
         image_bytes = await file.read()
-        print(f"📜 Received code image: {file.filename}, Size: {len(image_bytes)} bytes")  # Debugging
+        print(f"Received code image: {file.filename}, Size: {len(image_bytes)} bytes")  # Debugging
 
         extracted_code = extract_text_from_image(image_bytes)
 
@@ -163,11 +156,11 @@ async def extract_code(file: UploadFile = File(...)):
         else:
             response = {"extracted_code": extracted_code}
 
-        print("🖥️ Extracted Code:", response)  # Debugging
+        print("code:", response) 
         return JSONResponse(content=response)
 
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f"Error: {str(e)}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @app.post("/{action}")
@@ -183,5 +176,5 @@ async def ai_operations(action: str, request_body: dict):
         return JSONResponse(content={"result": result})
 
     except Exception as e:
-        print(f"❌ Error processing {action}: {str(e)}")
+        print(f"Error processing {action}: {str(e)}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
